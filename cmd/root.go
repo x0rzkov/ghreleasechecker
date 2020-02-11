@@ -108,7 +108,7 @@ func init() {
 	// Flags and configuration settings.
 	RootCmd.PersistentFlags().BoolVar(&version, "version", false, "Display version")
 	RootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Display debugging details")
-	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "",
+	RootCmd.PersistentFlags().StringVar(&cfgFile, "config", "c",
 		"config file (default is $HOME/.config/"+AppName+"/"+AppName+".yaml)")
 	RootCmd.PersistentFlags().StringVarP(&token, "token", "t", "",
 		"Github API user token")

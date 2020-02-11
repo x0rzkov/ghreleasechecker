@@ -152,12 +152,12 @@ func (c *Config) checkRepoReleases(ctx context.Context, wID int, prereleases boo
 
 	rr, resp, err := client.Repositories.ListReleases(ctx, pp[0], pp[1], nil)
 	if err != nil {
+		rateLimits, _, err := client.RateLimits(context.Background())
 		if resp != nil && resp.Response != nil &&
-			resp.Response.StatusCode == 403 && resp.Remaining == 0 {
-			logrus.Infof("[%d] We're being rate-limited.  Limit reset at %v", wID, resp.Reset)
-
+			 resp.Response.StatusCode == 403 && rateLimits.GetCore().Remaining == 0 {
+			logrus.Infof("[%d] We're being rate-limited.  Limit reset at %v", wID, rateLimits.GetCore().Reset)
 			if c.Wait {
-				d := resp.Reset.Sub(time.Now())
+				d := rateLimits.GetCore().Reset.Sub(time.Now())
 				if d < 0 {
 					d = 0
 				}
@@ -238,3 +238,5 @@ func (c *Config) checkRepoReleases(ctx context.Context, wID int, prereleases boo
 
 	return newReleaseList, nil
 }
+
+
